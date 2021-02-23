@@ -34,7 +34,7 @@ class EditProfile(LoginRequiredMixin,UpdateView):
     model=UserProfile
     fields = ['phone_no','Place','address']
     success_url = reverse_lazy('home')
-    template_name = 'profiles/createprofile.html'
+    template_name = 'profiles/editprofile.html'
 
 class DeleteProfile(LoginRequiredMixin,DeleteView):
     model = UserProfile
@@ -65,6 +65,36 @@ def generate_pin_accno(request):
     return render(request, "profiles/success.html")
 
 
+# class BalanceInfoView(LoginRequiredMixin,View):
+#
+#     def post(self,request):
+#
+#         form = BalanceInfoForm(request.POST)
+#         context={}
+#         if form.is_valid():
+#             pin = form.cleaned_data.get("pin")
+#             try:
+#
+#                 account = AccountInfo.objects.get(account_pin=pin)
+#                 context["balance"] = account.balance
+#
+#                 return render(request, "profiles/BalanceInfo.html", context)
+#             except Exception as e:
+#                 context["form"] = form
+#                 return render(request, "profiles/BalanceEnquiry.html", context)
+#
+#
+#         return render(request, "profiles/BalanceEnquiry.html", context)
+#     def get(self,request):
+#         context={}
+#         form=BalanceInfoForm()
+#         context['form']=form
+#         return render(request,'profiles/BalanceEnquiry.html',context)
+
+
+
+
+
 class BalanceInfoView(LoginRequiredMixin,View):
 
     def post(self,request):
@@ -73,17 +103,16 @@ class BalanceInfoView(LoginRequiredMixin,View):
         context={}
         if form.is_valid():
             pin = form.cleaned_data.get("pin")
-            try:
+            account = AccountInfo.objects.get(account_pin=pin)
+            context["balance"] = account.balance
 
-                account = AccountInfo.objects.get(account_pin=pin)
-                context["balance"] = account.balance
-
-                return render(request, "profiles/BalanceInfo.html", context)
-            except Exception as e:
-                context["form"] = form
-                return render(request, "profiles/BalanceEnquiry.html", context)
+            return render(request, "profiles/BalanceInfo.html", context)
+        else:
+            context["form"] = form
+            return render(request, "profiles/BalanceEnquiry.html", context)
 
         return render(request, "profiles/BalanceEnquiry.html", context)
+
     def get(self,request):
         context={}
         form=BalanceInfoForm()

@@ -17,7 +17,17 @@ class ProfileForm(ModelForm):
 
 
 class BalanceInfoForm(forms.Form):
-    pin=forms.IntegerField()
+    pin=forms.IntegerField(widget=forms.PasswordInput)
+    def clean(self):
+        cleaned_data = super().clean()
+        pin = cleaned_data.get("pin")
+        try:
+            object=AccountInfo.objects.get(account_pin=pin)
+        except:
+            msg = "invalid pin"
+            self.add_error("pin", msg)
+
+
 
 
 class TransactionForm(ModelForm):
@@ -26,7 +36,8 @@ class TransactionForm(ModelForm):
         fields=['account_no','amount','type','account_pin']
         widgets={
             'account_no':forms.HiddenInput(),
-            'type':forms.Select()
+            'type':forms.Select(),
+            "account_pin": forms.PasswordInput(attrs={'class': "form-control"})
         }
 
 
@@ -50,11 +61,11 @@ class TransactionForm(ModelForm):
 class TransferForm(ModelForm):
     class Meta:
         model=Transfer
-        fields="__all__"
+        fields=['from_account','to_account','amount','account_pin']
         widgets={
             "from_account": forms.TextInput(attrs={'class': "form-control",'readonly':True}),
             "amount":forms.NumberInput(attrs={'class': "form-control"}),
-            "transfer_date_time":forms.HiddenInput()
+            "account_pin":forms.PasswordInput(attrs={'class': "form-control"})
 
         }
     def clean(self):

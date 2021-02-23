@@ -11,14 +11,16 @@
         <th>Amount</th>
         <th>Date</th>
     </tr>
-    <tr>
+
         {%for item in object_list%}
+    <tr>
         <td>{{item.type}}</td>
         <td>{{item.amount}}</td>
         <td>{{item.transaction_date_time}}</td>
+         </tr>
 {%endfor%}
 
-    </tr>
+
 </table>
 
 </body>

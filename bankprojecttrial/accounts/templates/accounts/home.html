@@ -3,17 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 </head>
 <body>
 {% if request.user.is_authenticated %}
-<h2>welcome {{user}}</h2>
-<a href="{%url 'logout'%}">Logout</a>
+<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+    <!-- Navbar content -->
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1"><h1>SBB BANK</h1></span>
+        <a href="{%url 'logout'%}">Logout</a>
+    </div>
+
+</nav>
+
 {%if uid is None%}
 <a href="{%url 'createprofile'%}">Create Profile</a>
 {%else%}
-<a href="{%url 'viewprofile' uid%}">View profile</a>
-<a href="{%url 'editprofile' uid%}">Edit profile</a>
-<a href="{%url 'deleteprofile' uid%}">Delete profile</a>
+<div class="d-grid gap-2 col-3 mx-auto">
+
+    <a href="{%url 'viewprofile' uid%}" class="btn btn-primary">View profile</a>
+    <a href="{%url 'editprofile' uid%}" class="btn btn-secondary">Edit profile</a>
+    <a href="{%url 'deleteprofile' uid%}" class="btn btn-danger">Delete profile</a>
+</div>
+
 {%endif%}
 {%else%}
 You are not authenticated !!!<a href="{%url 'login'%}">Login Here</a>
