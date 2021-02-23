@@ -52,9 +52,9 @@ class TransferForm(ModelForm):
         model=Transfer
         fields="__all__"
         widgets={
-            "Account_no": forms.TextInput(attrs={'class': "form-control",'readonly':True}),
+            "from_account": forms.TextInput(attrs={'class': "form-control",'readonly':True}),
             "amount":forms.NumberInput(attrs={'class': "form-control"}),
-            "date_of_transfer":forms.HiddenInput()
+            "transfer_date_time":forms.HiddenInput()
 
         }
     def clean(self):
@@ -63,8 +63,7 @@ class TransferForm(ModelForm):
         pin=cleaned_data.get('account_pin')
         to_account_no=cleaned_data.get('to_account')
         from_account_no = cleaned_data.get('from_account')
-        print(to_account_no,from_account_no)
-        if to_account_no==from_account_no:
+        if to_account_no.account_no == from_account_no:
             msg="you cant transfer to your own account"
             self.add_error('to_account', msg)
         try:

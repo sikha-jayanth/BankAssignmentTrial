@@ -42,7 +42,7 @@ class Transactions(models.Model):
 
 
 class Transfer(models.Model):
-    from_account=models.CharField(max_length=100)
+    from_account=models.CharField("account no",max_length=100)
     to_account=models.ForeignKey(AccountInfo,on_delete=models.CASCADE)
     amount=models.IntegerField(default=100)
     account_pin=models.IntegerField()

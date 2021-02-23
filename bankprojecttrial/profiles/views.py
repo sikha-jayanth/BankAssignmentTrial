@@ -15,7 +15,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import BalanceInfoForm,TransactionForm,TransferForm
 # Create your views here.
 
-class CreateProfile(CreateView):
+class CreateProfile(LoginRequiredMixin,CreateView):
     form_class = ProfileForm
     success_url = reverse_lazy('homemain')
     template_name = 'profiles/createprofile.html'
@@ -36,20 +36,18 @@ class EditProfile(LoginRequiredMixin,UpdateView):
     success_url = reverse_lazy('home')
     template_name = 'profiles/createprofile.html'
 
-class DeleteProfile(DeleteView):
+class DeleteProfile(LoginRequiredMixin,DeleteView):
     model = UserProfile
     template="profiles/userprofile_confirm_delete.html"
     success_url = reverse_lazy('home')
 
-class ViewProfile(DetailView):
+class ViewProfile(LoginRequiredMixin,DetailView):
     model = UserProfile
     fields="__all__"
     success_url = reverse_lazy('home')
     template_name = "profiles/viewprofile.html"
 
-    @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        return super(self.__class__, self).dispatch(request, *args, **kwargs)
+
 
 
 
@@ -67,7 +65,7 @@ def generate_pin_accno(request):
     return render(request, "profiles/success.html")
 
 
-class BalanceInfoView(View):
+class BalanceInfoView(LoginRequiredMixin,View):
 
     def post(self,request):
 
@@ -93,7 +91,7 @@ class BalanceInfoView(View):
         return render(request,'profiles/BalanceEnquiry.html',context)
 
 
-class TransactionsView(FormView):
+class TransactionsView(LoginRequiredMixin,FormView):
     form_class = TransactionForm
     fields="__all__"
     success_url = reverse_lazy('home')
@@ -135,9 +133,8 @@ class TransactionsView(FormView):
             return render(request, "profiles/transactions.html", context)
         return render(request, "profiles/transactions.html", context)
 
-class TransferView(FormView):
+class TransferView(LoginRequiredMixin,FormView):
     form_class = TransferForm
-    fields="['amount','to_account','account_pin']"
     success_url = reverse_lazy('home')
     template_name = 'profiles/transferamount.html'
 
@@ -175,6 +172,15 @@ class TransferView(FormView):
         return render(request, "profiles/transferamount.html", context)
 
 
+class ActivityLog(ListView):
+    model = Transactions
+    template_name = "profiles/activitylog.html"
+
+    def get_queryset(self):
+        acno=self.request.user.map.account_no
+        # qs=Transactions.objects.filter(account_no__account_no__contains=acno)
+        # print(qs)
+        return Transactions.objects.filter(account_no__account_no__contains=acno)
 
 
 

@@ -124,6 +124,7 @@ STATIC_URL = '/static/'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # LOGOUT_REDIRECT_URL='/accounts/login/'
 # LOGIN_REDIRECT_URL='/accounts/homemain'
+LOGIN_URL='login'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587

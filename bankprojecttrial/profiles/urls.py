@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib.auth.decorators import login_required
 from django.urls import path
-from .views import CreateProfile,EditProfile,DeleteProfile,ViewProfile,generate_pin_accno,generate_message,activate_account,BalanceInfoView,TransactionsView,TransferView
+from .views import CreateProfile,EditProfile,DeleteProfile,ViewProfile,generate_pin_accno,generate_message,activate_account,BalanceInfoView,TransactionsView,TransferView,ActivityLog
 
 urlpatterns = [
     path('createprofile',CreateProfile.as_view(),name='createprofile'),
@@ -28,6 +28,6 @@ urlpatterns = [
     path('balanceinfo',BalanceInfoView.as_view(),name='balanceinfo'),
     path('transactions',TransactionsView.as_view(),name='transactions'),
     path('transfer',TransferView.as_view(),name='transfer'),
-    # path('activitylog',ActivityLog.as_view(),name='activitylog')
+    path('activitylog',ActivityLog.as_view(),name='activitylog')
 
 ]

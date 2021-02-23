@@ -5,9 +5,21 @@
     <title>Title</title>
 </head>
 <body>
-{%for item in qs%}
-{{item.type}}
-{{item.amount}}
+<table>
+    <tr>
+        <th>Transaction type</th>
+        <th>Amount</th>
+        <th>Date</th>
+    </tr>
+    <tr>
+        {%for item in object_list%}
+        <td>{{item.type}}</td>
+        <td>{{item.amount}}</td>
+        <td>{{item.transaction_date_time}}</td>
 {%endfor%}
+
+    </tr>
+</table>
+
 </body>
 </html>
