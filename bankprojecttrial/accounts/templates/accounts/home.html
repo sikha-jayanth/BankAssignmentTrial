@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% if request.user.is_authenticated %}
+<h2>welcome {{user}}</h2>
+<a href="{%url 'logout'%}">Logout</a>
+{%if uid is None%}
+<a href="{%url 'createprofile'%}">Create Profile</a>
+{%else%}
+<a href="{%url 'viewprofile' uid%}">View profile</a>
+<a href="{%url 'editprofile' uid%}">Edit profile</a>
+<a href="{%url 'deleteprofile' uid%}">Delete profile</a>
+{%endif%}
+{%else%}
+You are not authenticated !!!<a href="{%url 'login'%}">Login Here</a>
+{%endif%}
+</body>
+</html>

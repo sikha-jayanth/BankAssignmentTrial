@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% if request.user.is_authenticated %}
+<h2>welcome {{user}}</h2>
+<a href="{%url 'logout'%}">Logout</a>
+{%if account is None%}
+<a href="{%url 'generate'%}">Click here to activate your account</a>
+{%else%}
+<a href="{%url 'balanceinfo'%}">View Balance</a>
+<a href="{%url 'transactions'%}">Transactions</a>
+<a href="{%url 'transfer'%}">Transferamount</a>
+<a href="#">ActivityLog</a>
+{%endif%}
+{%else%}
+You are not authenticated !!!<a href="{%url 'login'%}">Login Here</a>
+{%endif%}
+</body>
+</html>

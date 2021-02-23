@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% if request.user.is_authenticated %}
+<h2>welcome {{user}}</h2>
+<a href="{%url 'home'%}">Profile</a>
+<a href="{%url 'accounthome'%}">Account</a>
+<p><a href="{%url 'logout'%}">Logout</a></p>
+{%endif%}
+</body>
+</html>
