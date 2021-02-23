@@ -3,7 +3,7 @@ List of apps:
  1.Accounts:
          create/update/delete user profile
  2.Profiles
-          Balance Enquiry/deposit/withdraw/transfer money to another account
+          Balance Enquiry/deposit/withdraw/transfer money to another account/activity Log
           
  models used:
      1.User(inbuilt)
