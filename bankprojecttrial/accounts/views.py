@@ -48,19 +48,7 @@ def logout_view(request):
 
 
 
-class HomeView(LoginRequiredMixin,View):
-    login_url = '/accounts/login/'
-    template_name = 'accounts/home.html'
-    def get(self, request):
-        context={}
-        try:
-            uid= UserProfile.objects.get(user=request.user).id
-            print(uid,type(uid))
-        except:
-            uid=None
 
-        context = {'uid': uid}
-        return render(request, 'accounts/home.html', context)
 
 
 def change_password(request):
@@ -80,22 +68,6 @@ def change_password(request):
         'form': form
     })
 
-class AccountHomeView(View):
-    template_name = 'accounts/accounthome.html'
 
-    def get(self, request):
-        context={}
-        try:
-            print(request.user)
-            account= AccountInfo.objects.get(user=request.user)
-
-        except:
-            account=None
-        context = {'account': account}
-        return render(request, 'accounts/accounthome.html', context)
-
-class HomeMainView(View):
-    def get(self,request):
-        return render(request,'accounts/homemain.html')
 
 

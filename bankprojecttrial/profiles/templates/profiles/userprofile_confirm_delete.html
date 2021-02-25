@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'profiles/base.html'%}
+{% block body_block %}
 <form method="post">{% csrf_token %}
-    <p>Are you sure you want to delete "{{ object }}"?</p>
+    <p>Are you sure you want to delete your profile details?</p>
     <input type="submit" value="Confirm">
 </form>
 
-</body>
-</html>
+{%endblock%}

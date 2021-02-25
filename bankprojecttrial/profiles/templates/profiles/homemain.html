@@ -1,0 +1,10 @@
+{% extends 'profiles/base.html'%}
+{% block body_block %}
+
+<div class="d-grid gap-2 col-6 mx-auto">
+    <h2>welcome {{user}}</h2>
+    <a href="{%url 'profilehome'%}" class="btn btn-primary btn-lg">Profile</a>
+    <a href="{%url 'accounthome'%}" class="btn btn-success btn-lg">Account</a>
+
+</div>
+{% endblock %}

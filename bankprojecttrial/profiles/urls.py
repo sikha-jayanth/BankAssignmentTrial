@@ -15,19 +15,25 @@ Including another URLconf
 """
 from django.contrib.auth.decorators import login_required
 from django.urls import path
-from .views import CreateProfile,EditProfile,DeleteProfile,ViewProfile,generate_pin_accno,generate_message,activate_account,BalanceInfoView,TransactionsView,TransferView,ActivityLog
+from .views import HomeMainView,ProfileHomeView,AccountHomeView, CreateProfile, EditProfile, DeleteProfile, ViewProfile, \
+    generate_pin_accno, generate_message, activate_account, BalanceInfoView, TransactionsView, TransferView, \
+    ActivityLog, TransferHistory
 
 urlpatterns = [
-    path('createprofile',CreateProfile.as_view(),name='createprofile'),
-    path('viewprofile<int:pk>',login_required(ViewProfile.as_view()),name='viewprofile'),
-    path('editprofile/<int:pk>/',EditProfile.as_view(),name='editprofile'),
-    path('deleteprofile<int:pk>',DeleteProfile.as_view(),name='deleteprofile'),
-    path('activate',activate_account,name='activate'),
-    path('generate',generate_pin_accno,name='generate'),
-    path('generatemessage',generate_message,name='generatemessage'),
-    path('balanceinfo',BalanceInfoView.as_view(),name='balanceinfo'),
-    path('transactions',TransactionsView.as_view(),name='transactions'),
-    path('transfer',TransferView.as_view(),name='transfer'),
-    path('activitylog',ActivityLog.as_view(),name='activitylog')
+    path('homemain', HomeMainView.as_view(), name='homemain'),
+    path('accounthome', AccountHomeView.as_view(), name='accounthome'),
+    path('profilehome', ProfileHomeView.as_view(), name='profilehome'),
+    path('createprofile', CreateProfile.as_view(), name='createprofile'),
+    path('viewprofile<int:pk>', login_required(ViewProfile.as_view()), name='viewprofile'),
+    path('editprofile/<int:pk>/', EditProfile.as_view(), name='editprofile'),
+    path('deleteprofile<int:pk>', DeleteProfile.as_view(), name='deleteprofile'),
+    path('activate', activate_account, name='activate'),
+    path('generate', generate_pin_accno, name='generate'),
+    path('generatemessage', generate_message, name='generatemessage'),
+    path('balanceinfo', BalanceInfoView.as_view(), name='balanceinfo'),
+    path('transactions', TransactionsView.as_view(), name='transactions'),
+    path('transfer', TransferView.as_view(), name='transfer'),
+    path('activitylog', ActivityLog.as_view(), name='activitylog'),
+    path('transferhistory', TransferHistory.as_view(), name='transferhistory')
 
 ]

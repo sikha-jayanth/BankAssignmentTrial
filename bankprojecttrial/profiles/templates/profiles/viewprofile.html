@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'profiles/base.html'%}
+{% block body_block %}
 <h3>Details</h3>
 <table>
   <tr>
@@ -12,8 +7,8 @@
       <td>{{object.phone_no}}</td>
   </tr>
     <tr>
-      <td>Email</td>
-      <td>{{object.email}}</td>
+      <td>Place</td>
+      <td>{{object.Place}}</td>
     </tr>
     <tr>
       <td>Address</td>
@@ -23,5 +18,4 @@
 
 
 </table>
-</body>
-</html>
+{%endblock%}

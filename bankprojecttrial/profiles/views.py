@@ -6,7 +6,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 
 from bankprojecttrial import settings
-from .models import UserProfile,AccountInfo,Transactions
+from .models import UserProfile,AccountInfo,Transactions,Transfer
 from .forms import ProfileForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, View, ListView
@@ -14,6 +14,46 @@ from django.views.generic.edit import UpdateView, DeleteView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import BalanceInfoForm,TransactionForm,TransferForm
 # Create your views here.
+
+class HomeMainView(View):
+    def get(self,request):
+        return render(request,'profiles/homemain.html')
+
+
+
+class ProfileHomeView(LoginRequiredMixin,View):
+    login_url = '/accounts/login/'
+    template_name = 'profiles/profilehome.html'
+    def get(self, request):
+        context={}
+        try:
+            uid= UserProfile.objects.get(user=request.user).id
+            print(uid,type(uid))
+        except:
+            uid=None
+
+        context = {'uid': uid}
+        return render(request, 'profiles/profilehome.html', context)
+
+
+
+class AccountHomeView(View):
+    template_name = 'profiles/accounthome.html'
+
+    def get(self, request):
+        context={}
+        try:
+            print(request.user)
+            account= AccountInfo.objects.get(user=request.user)
+
+        except:
+            account=None
+        context = {'account': account}
+        return render(request, 'profiles/accounthome.html', context)
+
+
+
+
 
 class CreateProfile(LoginRequiredMixin,CreateView):
     form_class = ProfileForm
@@ -33,18 +73,18 @@ def activate_account(request):
 class EditProfile(LoginRequiredMixin,UpdateView):
     model=UserProfile
     fields = ['phone_no','Place','address']
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('profilehome')
     template_name = 'profiles/editprofile.html'
 
 class DeleteProfile(LoginRequiredMixin,DeleteView):
     model = UserProfile
     template="profiles/userprofile_confirm_delete.html"
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('profilehome')
 
 class ViewProfile(LoginRequiredMixin,DetailView):
     model = UserProfile
     fields="__all__"
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('profilehome')
     template_name = "profiles/viewprofile.html"
 
 
@@ -65,31 +105,9 @@ def generate_pin_accno(request):
     return render(request, "profiles/success.html")
 
 
-# class BalanceInfoView(LoginRequiredMixin,View):
-#
-#     def post(self,request):
-#
-#         form = BalanceInfoForm(request.POST)
-#         context={}
-#         if form.is_valid():
-#             pin = form.cleaned_data.get("pin")
-#             try:
-#
-#                 account = AccountInfo.objects.get(account_pin=pin)
-#                 context["balance"] = account.balance
-#
-#                 return render(request, "profiles/BalanceInfo.html", context)
-#             except Exception as e:
-#                 context["form"] = form
-#                 return render(request, "profiles/BalanceEnquiry.html", context)
-#
-#
-#         return render(request, "profiles/BalanceEnquiry.html", context)
-#     def get(self,request):
-#         context={}
-#         form=BalanceInfoForm()
-#         context['form']=form
-#         return render(request,'profiles/BalanceEnquiry.html',context)
+
+
+
 
 
 
@@ -98,7 +116,6 @@ def generate_pin_accno(request):
 class BalanceInfoView(LoginRequiredMixin,View):
 
     def post(self,request):
-
         form = BalanceInfoForm(request.POST)
         context={}
         if form.is_valid():
@@ -146,9 +163,9 @@ class TransactionsView(LoginRequiredMixin,FormView):
 
                 account = AccountInfo.objects.get(account_pin=account_pin)
                 bal=account.balance
-                if type=="deposit":
+                if type=="credit":
                     bal=bal+amount
-                elif type=="withdraw":
+                elif type=="debit":
                     bal=bal-amount
                 account.balance=bal
                 account.save()
@@ -183,14 +200,18 @@ class TransferView(LoginRequiredMixin,FormView):
             to_account=form.cleaned_data.get('to_account')
             from_account=form.cleaned_data.get('from_account')
             account_pin=form.cleaned_data.get('account_pin')
+
             from_balance = AccountInfo.objects.get(account_pin=account_pin).balance
-            to_balance = AccountInfo.objects.get(account_no=to_account).balance
+            # # to_balance = AccountInfo.objects.get(account_no=to_account).balance
+            # print(type(amount), type(from_balance))
+
+            from_balance = from_balance-amount
+            to_account.balance += amount
             print(from_balance)
-            print(to_balance)
-            from_balance -= amount
-            to_balance += amount
+            print(to_account.balance)
             AccountInfo.objects.filter(account_no=from_account).update(balance=from_balance)
-            AccountInfo.objects.filter(account_no=to_account).update(balance=to_balance)
+            # AccountInfo.objects.filter(account_no=to_account).update(balance=to_balance)
+            to_account.save()
             form.save()
             return redirect('accounthome')
 
@@ -212,6 +233,12 @@ class ActivityLog(ListView):
         return Transactions.objects.filter(account_no__account_no__contains=acno)
 
 
+class TransferHistory(ListView):
+    model=Transfer
+    template_name='profiles/transferhistory.html'
+    def get_queryset(self):
+        acno=self.request.user.map.account_no
+        return Transfer.objects.filter(from_account=acno)
 
 
 

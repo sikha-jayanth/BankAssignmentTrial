@@ -32,18 +32,18 @@ class AccountInfo(models.Model):
 
 class Transactions(models.Model):
     account_no=models.ForeignKey(AccountInfo,on_delete=models.CASCADE)
-    account_pin=models.IntegerField()
+    # account_pin=models.IntegerField()
     amount=models.IntegerField(default=100)
     choices = (
-        ("deposit", "deposit"), ("withdraw", "withdraw")
+        ("debit", "debit"), ("credit", "credit")
     )
     type=models.CharField(max_length=100, choices=choices, default="deposit")
-    transaction_date_time = models.DateField("date and time", default=datetime.now())
+    transaction_date_time = models.DateTimeField("date and time", default=datetime.today())
 
 
 class Transfer(models.Model):
     from_account=models.CharField("account no",max_length=100)
     to_account=models.ForeignKey(AccountInfo,on_delete=models.CASCADE)
+    # account_pin = models.IntegerField()
     amount=models.IntegerField(default=100)
-    account_pin=models.IntegerField()
-    transfer_date_time=models.TimeField("date and time",default=datetime.now())
+    transfer_date_time=models.DateTimeField("date and time",default=datetime.today())

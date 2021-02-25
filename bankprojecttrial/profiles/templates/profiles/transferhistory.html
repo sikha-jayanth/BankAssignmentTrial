@@ -4,22 +4,22 @@
 {%if object_list%}
 <table class="table table-success table-striped">
     <tr>
-        <th>Transaction type</th>
+        <th>To Account</th>
         <th>Amount</th>
-        <th>Date</th>
+        <th>Date and Time</th>
     </tr>
 
         {%for item in object_list%}
     <tr>
-        <td>{{item.type}}</td>
+        <td>{{item.to_account}}</td>
         <td>{{item.amount}}</td>
-        <td>{{item.transaction_date_time}}</td>
+        <td>{{item.transfer_date_time}}</td>
          </tr>
 {%endfor%}
 
 
 </table>
 {%else%}
-<h3>No transactions yet</h3>
+<h3>No transfer activities have been performed yet</h3>
 {%endif%}
 {%endblock%}

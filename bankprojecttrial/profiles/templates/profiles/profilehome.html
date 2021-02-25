@@ -1,0 +1,16 @@
+{% extends 'profiles/base.html'%}
+{% block body_block %}
+
+{%if uid is None%}
+<a href="{%url 'createprofile'%}">Create Profile</a>
+{%else%}
+<div class="d-grid gap-2 col-3 mx-auto">
+
+    <a href="{%url 'viewprofile' uid%}" class="btn btn-primary">View profile</a>
+    <a href="{%url 'editprofile' uid%}" class="btn btn-secondary">Edit profile</a>
+    <a href="{%url 'deleteprofile' uid%}" class="btn btn-danger">Delete profile</a>
+</div>
+
+{%endif%}
+
+{%endblock%}

@@ -31,13 +31,14 @@ class BalanceInfoForm(forms.Form):
 
 
 class TransactionForm(ModelForm):
+    account_pin = forms.IntegerField(widget=forms.PasswordInput)
     class Meta:
         model=Transactions
-        fields=['account_no','amount','type','account_pin']
+        fields=['account_no','amount','type']
         widgets={
             'account_no':forms.HiddenInput(),
             'type':forms.Select(),
-            "account_pin": forms.PasswordInput(attrs={'class': "form-control"})
+            # "account_pin": forms.PasswordInput(attrs={'class': "form-control"})
         }
 
 
@@ -59,13 +60,14 @@ class TransactionForm(ModelForm):
 
 
 class TransferForm(ModelForm):
+    account_pin=forms.IntegerField(widget=forms.PasswordInput)
     class Meta:
         model=Transfer
-        fields=['from_account','to_account','amount','account_pin']
+        fields=['from_account','to_account','amount']
         widgets={
             "from_account": forms.TextInput(attrs={'class': "form-control",'readonly':True}),
             "amount":forms.NumberInput(attrs={'class': "form-control"}),
-            "account_pin":forms.PasswordInput(attrs={'class': "form-control"})
+            # "account_pin":forms.PasswordInput(attrs={'class': "form-control"})
 
         }
     def clean(self):

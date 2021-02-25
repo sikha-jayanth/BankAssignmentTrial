@@ -1,0 +1,20 @@
+{% extends 'profiles/base.html'%}
+{% block body_block %}
+
+
+{%if account is None%}
+<a href="{%url 'generate'%}">Click here to activate your account</a>
+{%else%}
+
+<div class="d-grid gap-2 col-3 mx-auto">
+    <h6>ACCOUNT N0:{{user.map.account_no}}</h6>
+    <a href="{%url 'balanceinfo'%}" class="btn btn-primary">View Balance</a>
+    <a href="{%url 'transactions'%}" class="btn btn-secondary">Transactions</a>
+    <a href="{%url 'transfer'%}" class="btn btn-danger">Transfer amount</a>
+    <a href="{%url 'activitylog'%}" class="btn btn-info">Activity Log</a>
+    <a href="{%url 'transferhistory'%}" class="btn btn-success">Transfer History</a>
+</div>
+
+{%endif%}
+
+{%endblock%}
