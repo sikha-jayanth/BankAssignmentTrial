@@ -2,6 +2,7 @@ import random
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 
@@ -114,16 +115,22 @@ def generate_pin_accno(request):
 
 
 class BalanceInfoView(LoginRequiredMixin,View):
+    model=AccountInfo
 
     def post(self,request):
         form = BalanceInfoForm(request.POST)
         context={}
         if form.is_valid():
             pin = form.cleaned_data.get("pin")
-            account = AccountInfo.objects.get(account_pin=pin)
-            context["balance"] = account.balance
+            try:
+                account = AccountInfo.objects.get(user=self.request.user,account_pin=pin)
+                context["balance"] = account.balance
 
-            return render(request, "profiles/BalanceInfo.html", context)
+                return render(request, "profiles/BalanceInfo.html", context)
+            except:
+                context["form"] = form
+                return render(request, "profiles/BalanceEnquiry.html", context)
+
         else:
             context["form"] = form
             return render(request, "profiles/BalanceEnquiry.html", context)
@@ -147,7 +154,7 @@ class TransactionsView(LoginRequiredMixin,FormView):
 
 
     def get_initial(self):
-        print(self.request.user.map.account_no)
+        # print(self.request.user.map.account_no)
         return {'account_no': self.request.user}
 
 
@@ -161,7 +168,7 @@ class TransactionsView(LoginRequiredMixin,FormView):
             # accno=form.cleaned_data.get("account_no")
             try:
 
-                account = AccountInfo.objects.get(account_pin=account_pin)
+                account = AccountInfo.objects.get(user=self.request.user,account_pin=account_pin)
                 bal=account.balance
                 if type=="credit":
                     bal=bal+amount
@@ -200,20 +207,24 @@ class TransferView(LoginRequiredMixin,FormView):
             to_account=form.cleaned_data.get('to_account')
             from_account=form.cleaned_data.get('from_account')
             account_pin=form.cleaned_data.get('account_pin')
-
-            from_balance = AccountInfo.objects.get(account_pin=account_pin).balance
+            try:
+                from_balance = AccountInfo.objects.get(user=self.request.user,account_pin=account_pin).balance
             # # to_balance = AccountInfo.objects.get(account_no=to_account).balance
             # print(type(amount), type(from_balance))
 
-            from_balance = from_balance-amount
-            to_account.balance += amount
-            print(from_balance)
-            print(to_account.balance)
-            AccountInfo.objects.filter(account_no=from_account).update(balance=from_balance)
+                from_balance = from_balance-amount
+                to_account.balance += amount
+                print(from_balance)
+                print(to_account.balance)
+                AccountInfo.objects.filter(account_no=from_account).update(balance=from_balance)
             # AccountInfo.objects.filter(account_no=to_account).update(balance=to_balance)
-            to_account.save()
-            form.save()
-            return redirect('accounthome')
+                to_account.save()
+                form.save()
+                return redirect('accounthome')
+            except:
+                context["form"] = form
+                return render(request, "profiles/transferamount.html", context)
+
 
         else:
             context["form"]=form
